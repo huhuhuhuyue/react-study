@@ -6,3 +6,4 @@ export const ThemeConsumer = ThemeContext.Consumer
 
 export const UserContext = React.createContext() // 创建上下文
 export const UserProvider = UserContext.Provider
+export const UserConsumer = UserContext.Consumer

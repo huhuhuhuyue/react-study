@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {ThemeConsumer} from './context'
+import {ThemeConsumer, UserConsumer} from './context'
 
 // Consumer用法1
 export class ChildConsumer extends Component {
@@ -21,6 +21,13 @@ export class ChildConsumer2 extends Component {
           ctx => (
             <div className={ctx.themeColor}>
               ChildConsumer page2
+              <UserConsumer>
+                {
+                  user => (
+                    <p>ChildConsumer page2 {user.user}</p>
+                  )
+                }
+              </UserConsumer>
             </div>
           )
         }

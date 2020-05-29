@@ -1,5 +1,6 @@
-vue学习
-组件通训
+react学习：
+三种跨层级通讯的方式
+高阶组件
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -21,16 +21,30 @@ export default class ComponentCommunication extends Component {
       }
     }
   }
+  changeTheme = () => {
+    let color = this.state.themeColor.themeColor === 'red' ? 'blue' : 'red';
+    this.setState({
+      themeColor: {
+        themeColor: color
+      }
+    })
+  }
   render() {
     return (
+      // context发生变化子组件会重新渲染，变化是浅比较
+      // 如果传递值的方式是value={{themeColor: color}}，由于每次传入的对象的指针不同，每次都会进行刷新
+      // value={this.state.themeColor}每次传入的是同一个对象
       <ThemeProvider value={this.state.themeColor}>
         ComponentCommunication page
+        <button onClick={this.changeTheme}>换肤</button>
         {/* Provider可以嵌套 */}
         <UserProvider value={this.state.user}>
           {/* 子组件一 */}
           <ChildContextType/>
           {/* 子组件二 */}
           <ChildUseContext/>
+          {/* 子组件四：Consumer用法2 && Consumer嵌套 */}
+          <ChildConsumer2/>
         </UserProvider>
 
         <ThemeConsumer>
@@ -42,10 +56,17 @@ export default class ComponentCommunication extends Component {
             )
           }
         </ThemeConsumer>
-
-        {/* 子组件四：Consumer用法2 */}
-        <ChildConsumer2/>
       </ThemeProvider>
     )
   }
 }
+
+/**
+ * 区别：
+ *  consumer：适用于函数组件和类组件。
+ *    用法：{ ctx => (<Comp {...ctx} />) }
+ *  contextType：只能用于类组件，而且一个组件只能有一个contextType，如果有多个，后面的会覆盖前面的。
+ *    用法：static contextType = ThemeContext
+ *  useContext：只能用于函数组件，一个组件可以有多个useContext。
+ *    用法：const ThemeContextData = useContext(ThemeContext)
+ */
