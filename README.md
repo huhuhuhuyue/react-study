@@ -1,6 +1,11 @@
 react学习：
-三种跨层级通讯的方式
-高阶组件
+三种跨层级通讯的方式：react-study\src\pages\componentCommunication\ComponentCommunication.js
+高阶组件：react-study\src\pages\decorator\DecoratorIndex.js
+实现rc-form：react-study\src\pages\MyRcForm.js
+
+
+redux源码：https://github.com/reduxjs/redux
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
