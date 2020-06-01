@@ -9,6 +9,10 @@ import store from '../../store/index'
  * Symbol(observable): ƒ observable() 
 */
 export default class ReduxPage extends Component {
+  toggle = () => {
+    store.dispatch({type: 'TOGGLE'})
+  }
+
   numMinus = () => {
     store.dispatch({type: 'NUMMINUS', payload: 1})
   }
@@ -76,6 +80,10 @@ export default class ReduxPage extends Component {
         <button onClick={this.numMinus}>numMinus</button>
         {store.getState().numReducer}
         <button onClick={this.numAdd}>numAdd</button>
+        <br/>
+        <br/>
+        <button onClick={this.toggle}>点击</button>
+        {store.getState().toggleReducer ? 'true' : 'false'}
       </div>
     )
   }

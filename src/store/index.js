@@ -33,11 +33,19 @@ const numReducer = (state = 0, {type, payload = 1}) => {
       return state;
   }
 };
+const toggleReducer = (state = true, {type}) => {
+  switch (type) {
+    case "TOGGLE":
+      return !state;
+    default:
+      return state;
+  }
+};
 // 使用中间件：把中间件作为参数传递给applyMiddleware方法
 // 中间件是有顺序的
 // const store = createStore(counterReducer, applyMiddleware(thunk, promise, logger))
 // 项目中会有多个reducer，当存在多个reducer时使用combineReducers
-const store = createStore(combineReducers({counterReducer, numReducer}), applyMiddleware(thunk, promise, logger))
+const store = createStore(combineReducers({counterReducer, numReducer, toggleReducer}), applyMiddleware(thunk, promise, logger))
 
 // 实现一个logger中间件
 function logger (stateApi) {
