@@ -9,18 +9,25 @@ import store from '../../store/index'
  * Symbol(observable): ƒ observable() 
 */
 export default class ReduxPage extends Component {
-  minus = () => {
+  numMinus = () => {
+    store.dispatch({type: 'NUMMINUS', payload: 1})
+  }
+  numAdd = () => {
+    store.dispatch({type: 'NUMADD', payload: 1})
+  }
+
+  counterMinus = () => {
     store.dispatch({type: 'MINUS', payload: 100})
   }
-  promiseMinus = () => {
+  counterPromiseMinus = () => {
     store.dispatch(Promise.resolve({
       type: 'MINUS', payload: 100
     }))
   }
-  add = () => {
+  counterAdd = () => {
     store.dispatch({type: 'ADD', payload: 100})
   }
-  asyncAdd = () => {
+  counterAsyncAdd = () => {
     // 如果给store.dispatch传入一个函数就不能执行了
     // Redux只是个纯粹的状态管理器，默认只⽀持同步，实现异步任务 ⽐如延迟，⽹络请求，需要中间件的⽀持，⽐如我们使⽤最简单的redux-thunk和redux-logger 
     // 不使用redux-thunk下面代码不能执行
@@ -55,14 +62,20 @@ export default class ReduxPage extends Component {
     return (
       <div>
         <p>redux Page</p>
-        <button onClick={this.minus}> minus </button>
-        <button onClick={this.promiseMinus}> promiseMinus </button>
+        <br/>
+        <button onClick={this.counterMinus}>counterMinus</button>
+        <button onClick={this.counterPromiseMinus}>counterPromiseMinus</button>
         {/*只有一个reducer时的用法*/}
         {/*{store.getState()}*/}
         {/*存在多个reducer时的用法*/}
         {store.getState().counterReducer}
-        <button onClick={this.add}> add </button>
-        <button onClick={this.asyncAdd}> asyncAdd </button>
+        <button onClick={this.counterAdd}>counterAdd</button>
+        <button onClick={this.counterAsyncAdd}>counterAsyncAdd</button>
+        <br/>
+        <br/>
+        <button onClick={this.numMinus}>numMinus</button>
+        {store.getState().numReducer}
+        <button onClick={this.numAdd}>numAdd</button>
       </div>
     )
   }

@@ -3,7 +3,9 @@ react学习：
 高阶组件：react-study\src\pages\decorator\DecoratorIndex.js
 实现rc-form：react-study\src\pages\MyRcForm.js
 
-
+redux用法：\src\pages\reduxPage\ReduxPage.js
+redux的实现：\src\kRedux\index.js
+store用法和中间件的实现：\src\pages\reduxPage\ReduxPage.js
 redux源码：https://github.com/reduxjs/redux
 
 
