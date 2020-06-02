@@ -1,9 +1,9 @@
 // import {createStore, applyMiddleware, combineReducers} from "redux";
-import isPromise from 'is-promise'; // 判断是否是promise
+// import isPromise from 'is-promise'; // 判断是否是promise
 // 引入中间件
-// import logger from "redux-logger";
-// import thunk from "redux-thunk";
-// import promise from 'redux-promise'
+import logger from "redux-logger";
+import thunk from "redux-thunk";
+import promise from 'redux-promise'
 
 import {createStore, applyMiddleware, combineReducers} from "../kRedux/index";
 // console.log(createStore)
@@ -48,54 +48,54 @@ const toggleReducer = (state = true, {type}) => {
 const store = createStore(combineReducers({counterReducer, numReducer, toggleReducer}), applyMiddleware(thunk, promise, logger))
 
 // 实现一个logger中间件
-function logger (stateApi) {
-  const {getState} = stateApi
-  // console.log(stateApi) // {getState: ƒ, dispatch: ƒ}
-  return (nextDispatch) => {
-    // console.log(nextDispatch) // dispatch(action) { //... }
-    return (action) => {
-      // console.log(action)  // {type: "ADD", payload: 100}
-      console.log('------------------------------')
-      console.log('action type：', action.type)
-      console.log('prev state：', getState())
-      console.log('action：', action)
-      // 执行dispatch
-      nextDispatch(action)
-      console.log('next state：', getState())
-      console.log('------------------------------')
-    }
-  }
-}
+// function logger (stateApi) {
+//   const {getState} = stateApi
+//   // console.log(stateApi) // {getState: ƒ, dispatch: ƒ}
+//   return (nextDispatch) => {
+//     // console.log(nextDispatch) // dispatch(action) { //... }
+//     return (action) => {
+//       // console.log(action)  // {type: "ADD", payload: 100}
+//       console.log('------------------------------')
+//       console.log('action type：', action.type)
+//       console.log('prev state：', getState())
+//       console.log('action：', action)
+//       // 执行dispatch
+//       nextDispatch(action)
+//       console.log('next state：', getState())
+//       console.log('------------------------------')
+//     }
+//   }
+// }
 
 // 实现一个thunk中间件
-function thunk (stateApi) {
-  const {getState, dispatch} = stateApi
-  // console.log(stateApi) // {getState: ƒ, dispatch: ƒ}
-  return (nextDispatch) => {
-    // console.log(nextDispatch) // dispatch(action) { //... }
-    return (action) => {
-      if (typeof action === 'function') {
-        // 当action是个函数时，该函数接收2个参数，即dispatch和getState，
-        // 使用：\src\pages\reduxPage\ReduxPage.js文件中的28行
-        return action(dispatch, getState)
-      } else {
-        return nextDispatch(action)
-      }
-    }
-  }
-}
+// function thunk (stateApi) {
+//   const {getState, dispatch} = stateApi
+//   // console.log(stateApi) // {getState: ƒ, dispatch: ƒ}
+//   return (nextDispatch) => {
+//     // console.log(nextDispatch) // dispatch(action) { //... }
+//     return (action) => {
+//       if (typeof action === 'function') {
+//         // 当action是个函数时，该函数接收2个参数，即dispatch和getState，
+//         // 使用：\src\pages\reduxPage\ReduxPage.js文件中的28行
+//         return action(dispatch, getState)
+//       } else {
+//         return nextDispatch(action)
+//       }
+//     }
+//   }
+// }
 
 // 实现一个promise中间件
-function promise (stateApi) {
-  const {dispatch} = stateApi
-  // console.log(stateApi) // {getState: ƒ, dispatch: ƒ}
-  return (nextDispatch) => {
-    // console.log(nextDispatch) // dispatch(action) { //... }
-    return (action) => {
-      // 如果action是promise，执行promise的then方法，否则直接执行nextDispatch(action)
-      return isPromise(action) ? action.then(dispatch) : nextDispatch(action)
-    }
-  }
-}
+// function promise (stateApi) {
+//   const {dispatch} = stateApi
+//   // console.log(stateApi) // {getState: ƒ, dispatch: ƒ}
+//   return (nextDispatch) => {
+//     // console.log(nextDispatch) // dispatch(action) { //... }
+//     return (action) => {
+//       // 如果action是promise，执行promise的then方法，否则直接执行nextDispatch(action)
+//       return isPromise(action) ? action.then(dispatch) : nextDispatch(action)
+//     }
+//   }
+// }
 
 export default store;

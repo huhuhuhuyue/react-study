@@ -1,14 +1,17 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.css'
 // import ComponentCommunication from './pages/componentCommunication/ComponentCommunication'
 // import {HocIndex} from './pages/hoc/HocIndex'
 // import DecoratorIndex from './pages/decorator/DecoratorIndex'
 // import MyRcForm from './pages/MyRcForm'
 // import CommonDialog from './pages/commonDialog/commonDialog'
-import ReduxPage from './pages/reduxPage/ReduxPage'
+// import ReduxPage from './pages/reduxPage/ReduxPage'
+import ReactReduxPage from './pages/reactReduxPage/ReactReduxPage'
+import ReactReduxHookPage from './pages/reactReduxPage/ReactReduxHookPage'
+
 function App() {
   // 使用useState的话1会console两次
-  let [showDialog, setShowDialog] = useState(true)
+  // let [showDialog, setShowDialog] = useState(true)
   return (
     <div className="App">
       {/*<ComponentCommunication/>*/}
@@ -16,12 +19,16 @@ function App() {
       {/*<DecoratorIndex name='zz'/>*/}
       {/*<MyRcForm/>*/}
 
-      <button onClick={() => setShowDialog(!showDialog)}>showDialog dialog</button>
+      {/*<button onClick={() => setShowDialog(!showDialog)}>showDialog dialog</button>*/}
       {/**渲染出来的CommonDialog在app下，我们希望他是全局的，和app平级 */}
       {/* {showDialog && <CommonDialog msg='app msg'/>} */}
 
       {/* ReduxPage */}
-      {showDialog && <ReduxPage/>}
+      {/*{showDialog && <ReduxPage/>}*/}
+
+      {/** ReactReduxPage */}
+      <ReactReduxPage name='cc'/>
+      <ReactReduxHookPage/>
     </div>
   );
 }

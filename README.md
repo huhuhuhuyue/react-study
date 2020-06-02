@@ -6,6 +6,9 @@ react学习：
 redux用法：\src\pages\reduxPage\ReduxPage.js
 redux的实现：\src\kRedux\index.js
 store用法和中间件的实现：\src\pages\reduxPage\ReduxPage.js
+
+react-redux在类组件中的用法：\src\pages\reactReduxPage\ReactReduxPage.js
+react-redux在函数组件中的用法：\src\pages\reactReduxPage\ReactReduxHookPage.js
 redux源码：https://github.com/reduxjs/redux
 
 
