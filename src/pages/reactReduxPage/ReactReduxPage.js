@@ -32,7 +32,7 @@ import {bindActionCreators} from '../../kReactRedux/index'
   //   minus: () => ({
   //     type: 'NUMMINUS'
   //   })
-  // }
+  // },
   // 写法二：函数，接收dispatch、ownProps（可选）
   // 如果接收了ownProps，父组件传来了props发生变化时会重新执行，所以如果方法不依赖自身的props时候就不要接收这个参数
   dispatch => {

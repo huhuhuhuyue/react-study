@@ -6,9 +6,10 @@ import './App.css'
 // import MyRcForm from './pages/MyRcForm'
 // import CommonDialog from './pages/commonDialog/commonDialog'
 // import ReduxPage from './pages/reduxPage/ReduxPage'
-import ReactReduxPage from './pages/reactReduxPage/ReactReduxPage'
+// import ReactReduxPage from './pages/reactReduxPage/ReactReduxPage'
 // import ReactReduxHookPage from './pages/reactReduxPage/ReactReduxHookPage'
 // import UseReducerPage from './pages/reactReduxPage/UseReducerPage'
+import ReactRouterPage from './pages/reactRouterPage/ReactRouterPage'
 
 function App() {
   // 使用useState的话1会console两次
@@ -21,26 +22,38 @@ function App() {
         {count}
         <button onClick={() => setCount(count + 1)}>add count</button>
       </p>
+
+      {/* 组件通讯 */}
       {/*<ComponentCommunication/>*/}
+
+      {/* 高阶组件 */}
       {/*<HocIndex name='cc'/>*/}
+
+      {/* 装饰器 */}
       {/*<DecoratorIndex name='zz'/>*/}
+
       {/*<MyRcForm/>*/}
 
       {/*<button onClick={() => setShowDialog(!showDialog)}>showDialog dialog</button>*/}
+
+      {/*全局弹窗组件*/}
       {/**渲染出来的CommonDialog在app下，我们希望他是全局的，和app平级 */}
       {/* {showDialog && <CommonDialog msg='app msg'/>} */}
 
-      {/* ReduxPage */}
+      {/* Redux */}
       {/*{showDialog && <ReduxPage/>}*/}
 
-      {/** ReactReduxPage */}
-      <ReactReduxPage name='cc' count={count}/>
+      {/** ReactRedux */}
+      {/*<ReactReduxPage name='cc' count={count}/>*/}
 
-      {/** ReactReduxHookPage */}
-      {/** <ReactReduxHookPage/> */}
+      {/** ReactReduxHook */}
+      {/*<ReactReduxHookPage/>*/}
 
-      {/** UseReducerPage */}
+      {/** UseReducer */}
       {/** <UseReducerPage/> */}
+
+      {/*ReactRouter */}
+      <ReactRouterPage/>
     </div>
   );
 }

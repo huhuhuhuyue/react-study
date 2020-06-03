@@ -3,8 +3,8 @@ export default function combineReducers (reducers) {
   // console.log(reducers)
   // combination的第一个参数是一个总的state，所以默认值是一个对象
   return function combination(state = {}, action) {
-    let nextState = {};
-    let hasChanged = false;
+    let nextState = {}
+    let hasChanged = false
     for (let key in reducers) {
       const reducer = reducers[key]
       const prevState = state[key]

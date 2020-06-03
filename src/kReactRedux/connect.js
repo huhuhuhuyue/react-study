@@ -1,6 +1,6 @@
-import React, {useContext, useEffect, useReducer} from  'react'
+import React, {useContext, useLayoutEffect, useReducer} from  'react'
 import context from './context'
-
+import bindActionCreators from './bindActionCreators'
 const connect = (
   mapStateToProps,
   mapDispatchToProps
@@ -14,16 +14,23 @@ const connect = (
       const {getState, dispatch, subscribe} = store
       // console.log(getState()) // {counterReducer: 0, numReducer: 0, toggleReducer: true}
       const stateProps = mapStateToProps(getState())
-      const dispatchProps = {dispatch}
+      let dispatchProps = {dispatch}
 
-      // 执行后不能自动更新页面
+      if (typeof mapDispatchToProps === 'function') {
+        dispatchProps = mapDispatchToProps(dispatch) // 函数形式的mapDispatchToProps，接收一个dispatch参数
+      } else if (typeof mapDispatchToProps === 'object') {
+        dispatchProps = bindActionCreators(mapDispatchToProps, dispatch) // 对象形式的mapDispatchToProps，使用bindActionCreators给对象的每一项绑定一个dispatch
+      }
+
+      // state变化后不能自动更新页面
       // 在函数组件中没有forceUpdate，所以要使用useReducer定义一个forceUpdate，但是要尽量避免这样使用
       const [ignored, forceUpdate] = useReducer(x => x + 1, 0)
-      useEffect(() => {
+      // 如果使用延时执行的useEffect，订阅可能会丢失，所以使用useLayoutEffect
+      useLayoutEffect(() => {
         const unsubscribe = subscribe(() => { // 订阅，返回值是取消订阅的方法
           forceUpdate() // 更新
         })
-        return () => unsubscribe && unsubscribe() // 返回一个函数，该函数执行取消订阅
+        return () => (unsubscribe && unsubscribe()) // 返回一个函数，该函数执行取消订阅
       }, [store, ignored, subscribe])
       
       // console.log(stateProps) // {numReducer: 0, toggleReducer: true}
