@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css'
 // import ComponentCommunication from './pages/componentCommunication/ComponentCommunication'
 // import {HocIndex} from './pages/hoc/HocIndex'
@@ -7,13 +7,20 @@ import './App.css'
 // import CommonDialog from './pages/commonDialog/commonDialog'
 // import ReduxPage from './pages/reduxPage/ReduxPage'
 import ReactReduxPage from './pages/reactReduxPage/ReactReduxPage'
-import ReactReduxHookPage from './pages/reactReduxPage/ReactReduxHookPage'
+// import ReactReduxHookPage from './pages/reactReduxPage/ReactReduxHookPage'
+// import UseReducerPage from './pages/reactReduxPage/UseReducerPage'
 
 function App() {
   // 使用useState的话1会console两次
   // let [showDialog, setShowDialog] = useState(true)
+  let [count, setCount] = useState(0)
   return (
     <div className="App">
+
+      <p>
+        {count}
+        <button onClick={() => setCount(count + 1)}>add count</button>
+      </p>
       {/*<ComponentCommunication/>*/}
       {/*<HocIndex name='cc'/>*/}
       {/*<DecoratorIndex name='zz'/>*/}
@@ -27,8 +34,13 @@ function App() {
       {/*{showDialog && <ReduxPage/>}*/}
 
       {/** ReactReduxPage */}
-      <ReactReduxPage name='cc'/>
-      <ReactReduxHookPage/>
+      <ReactReduxPage name='cc' count={count}/>
+
+      {/** ReactReduxHookPage */}
+      {/** <ReactReduxHookPage/> */}
+
+      {/** UseReducerPage */}
+      {/** <UseReducerPage/> */}
     </div>
   );
 }

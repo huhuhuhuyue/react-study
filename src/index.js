@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { Provider } from 'react-redux'
+// import { Provider } from 'react-redux'
+import { Provider } from './kReactRedux/index'
 import store from './store/index'
 // <React.StrictMode>会多次执行constructor
 // ReactDOM.render(

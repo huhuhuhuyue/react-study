@@ -9,6 +9,8 @@ store用法和中间件的实现：\src\pages\reduxPage\ReduxPage.js
 
 react-redux在类组件中的用法：\src\pages\reactReduxPage\ReactReduxPage.js
 react-redux在函数组件中的用法：\src\pages\reactReduxPage\ReactReduxHookPage.js
+使用useReducer：\src\pages\reactReduxPage\UseReducerPage.js
+实现kReactRedux：\src\kReactRedux
 redux源码：https://github.com/reduxjs/redux
 
 

@@ -23,7 +23,7 @@ const counterReducer = (state = 0, {type, payload = 1}) => {
       return state;
   }
 };
-const numReducer = (state = 0, {type, payload = 1}) => {
+export const numReducer = (state = 0, {type, payload = 1}) => {
   switch (type) {
     case "NUMADD":
       return state + payload;
