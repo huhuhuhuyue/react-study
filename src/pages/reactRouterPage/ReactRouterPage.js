@@ -5,6 +5,7 @@ import LoginPage from './LoginPage'
 import UserPage from './UserPage'
 import NotFindPage from './NotFindPage'
 import ProductPage from './ProductPage'
+import PrivateRoute from './PrivateRoute'
 export default class ReactRouterPage extends Component {
   render() {
     return (
@@ -36,8 +37,18 @@ export default class ReactRouterPage extends Component {
               component={IndexPage}
               render = {() => <div>render page</div>}
             ></Route>
+            
+            {/** 定义了component={LoginPage}>之后，Route中又有子元素的话，子元素生效，定义的component不生效 */}
+            { /* <Route path='/login' component={LoginPage}>
+              <p> 我是login page </p>
+              <p> 我是login page </p>
+            </Route> */}
             <Route path='/login' component={LoginPage}></Route>
-            <Route path='/user' component={UserPage}></Route>
+
+            {/* <Route path='/user' component={UserPage}></Route> */}
+            {/* 使用PrivateRoute做路由拦截 */}
+            <PrivateRoute path='/user' component={UserPage}></PrivateRoute>
+            
             {/* 在路由地址后加/:id接收参数 */}
             <Route path='/product/:id' component={ProductPage}></Route>
             <Route component={NotFindPage}></Route>

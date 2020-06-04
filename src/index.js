@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-// import { Provider } from 'react-redux'
-import { Provider } from './kReactRedux/index'
+import { Provider } from 'react-redux'
+// import { Provider } from './kReactRedux/index'  // 自己写的Provider要和自己写的connect搭配使用，混搭会报错
 import store from './store/index'
+
 // <React.StrictMode>会多次执行constructor
 // ReactDOM.render(
 //   <React.StrictMode>

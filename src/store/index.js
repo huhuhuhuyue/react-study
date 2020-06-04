@@ -41,11 +41,21 @@ const toggleReducer = (state = true, {type}) => {
       return state;
   }
 };
+
+const loginReducer = (state = false, {type}) => {
+  switch (type) {
+    case "LOGINSUCESS":
+      return true;
+    default:
+      return false;
+  }
+};
+
 // 使用中间件：把中间件作为参数传递给applyMiddleware方法
 // 中间件是有顺序的
 // const store = createStore(counterReducer, applyMiddleware(thunk, promise, logger))
 // 项目中会有多个reducer，当存在多个reducer时使用combineReducers
-const store = createStore(combineReducers({counterReducer, numReducer, toggleReducer}), applyMiddleware(thunk, promise, logger))
+const store = createStore(combineReducers({counterReducer, numReducer, toggleReducer, loginReducer}), applyMiddleware(thunk, promise, logger))
 
 // 实现一个logger中间件
 // function logger (stateApi) {
