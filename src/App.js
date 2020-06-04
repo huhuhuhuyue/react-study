@@ -9,7 +9,8 @@ import './App.css'
 // import ReactReduxPage from './pages/reactReduxPage/ReactReduxPage'
 // import ReactReduxHookPage from './pages/reactReduxPage/ReactReduxHookPage'
 // import UseReducerPage from './pages/reactReduxPage/UseReducerPage'
-import ReactRouterPage from './pages/reactRouterPage/ReactRouterPage'
+// import ReactRouterPage from './pages/reactRouterPage/ReactRouterPage'
+import RoutePage from './pages/reactRouterPage/RoutePage'
 
 function App() {
   // 使用useState的话1会console两次
@@ -53,7 +54,10 @@ function App() {
       {/** <UseReducerPage/> */}
 
       {/*ReactRouter */}
-      <ReactRouterPage/>
+      {/* <ReactRouterPage/> */}
+
+      {/* 对比Route三种匹配模式：children、component、render */}
+      <RoutePage/>
     </div>
   );
 }

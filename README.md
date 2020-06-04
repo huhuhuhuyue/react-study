@@ -13,6 +13,8 @@ react-redux在函数组件中的用法：\src\pages\reactReduxPage\ReactReduxHoo
 实现kReactRedux：\src\kReactRedux
 redux源码：https://github.com/reduxjs/redux
 
+react-router的基本用法：\src\pages\reactRouterPage\ReactRouterPage.js
+Route的三种渲染方式的区别：\src\pages\reactRouterPage\RoutePage.js
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
