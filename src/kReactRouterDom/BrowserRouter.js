@@ -16,3 +16,9 @@ export default class BrowserRouter extends Component {
     )
   }
 }
+
+// BrowserRouter、HashRouter、MemoryRouter实现时的区别
+// BrowserRouter使用createBrowserHistory()
+// HashRouter使用createHashHistory()
+// MemoryRoute使用createMemoryHistory()
+

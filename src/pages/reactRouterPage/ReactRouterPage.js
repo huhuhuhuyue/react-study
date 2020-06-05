@@ -10,13 +10,13 @@ import React, { Component } from 'react'
 // useParams,
 // withRouter
 // import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
-import { BrowserRouter as Router, Route, Link } from '../../kReactRouterDom/index'
+import { BrowserRouter as Router, Route, Link, Switch } from '../../kReactRouterDom/index'
 import IndexPage from './IndexPage'
-// import LoginPage from './LoginPage'
-// import UserPage from './UserPage'
+import LoginPage from './LoginPage'
+import UserPage from './UserPage'
 import NotFindPage from './NotFindPage'
-// import ProductPage from './ProductPage'
-// import PrivateRoute from './PrivateRoute'
+import ProductPage from './ProductPage'
+import PrivateRoute from './PrivateRoute'
 export default class ReactRouterPage extends Component {
   render() {
     return (
@@ -32,7 +32,7 @@ export default class ReactRouterPage extends Component {
           {/* 动态路由：在路由地址后加/1传递参数 */}
           <Link to='/product/1'>产品1 | </Link>
           <Link to='/product/2'>产品2 |</Link>
-          {/* <Switch> */}
+          <Switch>
             {/**
              * 路由的三种匹配模式：children、component、render
              * 三者是互斥的
@@ -54,16 +54,17 @@ export default class ReactRouterPage extends Component {
               <p> 我是login page </p>
               <p> 我是login page </p>
             </Route> */}
-            {/* <Route path='/login' component={LoginPage}></Route> */}
+            <Route path='/login' component={LoginPage}></Route>
 
-            {/* <Route path='/user' component={UserPage}></Route> */}
+            { /* <Route path='/user' component={UserPage}></Route> */}
             {/* 使用PrivateRoute做路由拦截 */}
-            {/* <PrivateRoute path='/user' component={UserPage}></PrivateRoute> */}
+            <PrivateRoute path='/user' component={UserPage}></PrivateRoute>
             
             {/* 在路由地址后加/:id接收参数 */}
-            {/* <Route path='/product/:id' component={ProductPage}></Route> */}
+            <Route path='/product/:id' component={ProductPage}></Route>
+            
             <Route component={NotFindPage}></Route>
-          {/* </Switch> */}
+          </Switch>
         </Router>
       </div>
     )

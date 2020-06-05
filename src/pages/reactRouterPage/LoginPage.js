@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {Redirect} from 'react-router-dom'
+// import {Redirect} from 'react-router-dom'
+import { Redirect} from '../../kReactRouterDom/index'
 import { connect } from 'react-redux'
 // import { connect } from '../../kReactRedux/index'
 @connect(

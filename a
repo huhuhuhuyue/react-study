@@ -1,0 +1,330 @@
+[1mdiff --git a/src/kReactRouterDom/BrowserRouter.js b/src/kReactRouterDom/BrowserRouter.js[m
+[1mindex fb9fcee..7275494 100644[m
+[1m--- a/src/kReactRouterDom/BrowserRouter.js[m
+[1m+++ b/src/kReactRouterDom/BrowserRouter.js[m
+[36m@@ -16,3 +16,9 @@[m [mexport default class BrowserRouter extends Component {[m
+     )[m
+   }[m
+ }[m
+[32m+[m[41m[m
+[32m+[m[32m// BrowserRouter、HashRouter、MemoryRouter实现时的区别[m[41m[m
+[32m+[m[32m// BrowserRouter使用createBrowserHistory()[m[41m[m
+[32m+[m[32m// HashRouter使用createHashHistory()[m[41m[m
+[32m+[m[32m// MemoryRoute使用createMemoryHistory()[m[41m[m
+[41m+[m
+[1mdiff --git a/src/kReactRouterDom/Route.js b/src/kReactRouterDom/Route.js[m
+[1mindex bfbd058..ab57fdc 100644[m
+[1m--- a/src/kReactRouterDom/Route.js[m
+[1m+++ b/src/kReactRouterDom/Route.js[m
+[36m@@ -1,6 +1,8 @@[m
+ import React, { Component } from 'react'[m
+ import context from './context'[m
+ import matchPath from './matchPath'[m
+[32m+[m[41m[m
+[32m+[m[32mconst Provider = context.Provider[m[41m[m
+ export default class Route extends Component {[m
+   render() {[m
+     // console.log(this.props) // {component: ƒ}[m
+[36m@@ -10,15 +12,35 @@[m [mexport default class Route extends Component {[m
+           (context) => {[m
+             // console.log(context)[m
+             // 如果当前的pathname === this.props.path，渲染this.props.component[m
+[31m-            // const math = context.history.location.pathname === this.props.path[m
+[32m+[m[32m            // const math = location.pathname === this.props.path[m[41m[m
+[32m+[m[32m            // return math ? React.createElement(this.props.component) : null // 简易版[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m            const {location} = context;[m[41m[m
+[32m+[m[32m            const {path, children, component, render} = this.props[m[41m[m
+[32m+[m[32m            // 如果匹配渲染三者之一，如果不匹配渲染children[m[41m[m
+             // react-route中的matchPath.js文件有个matchPath方法，原来对比path，接受两个参数，分别是现在是pathname和当前的props对象[m
+[31m-            const math = matchPath(context.history.location.pathname, this.props)[m
+[31m-            return math ? React.createElement(this.props.component) : null[m
+[31m-          }[m
+[31m-        }[m
+[32m+[m[32m            // 当path存在时先用matchPath去match，否则就用context的match[m[41m[m
+[32m+[m[32m            const match = path ? matchPath(location.pathname, this.props) : context.match[m[41m[m
+[32m+[m[32m            const props = {...context, ...location, match} // 要传递给路由组件的参数，有的页面需要获取match，所以要传下去[m[41m[m
+[32m+[m[32m            return ([m[41m[m
+[32m+[m[32m              <Provider value={props}>[m[41m[m
+[32m+[m[32m                {match[m[41m[m
+[32m+[m[32m                  ? children[m[41m[m
+[32m+[m[32m                    ? typeof children === "function"[m[41m[m
+[32m+[m[32m                      ? children(props)[m[41m[m
+[32m+[m[32m                      : children[m[41m[m
+[32m+[m[32m                    : component[m[41m[m
+[32m+[m[32m                    ? React.createElement(component, props)[m[41m[m
+[32m+[m[32m                    : render[m[41m[m
+[32m+[m[32m                    ? render(props)[m[41m[m
+[32m+[m[32m                    : null[m[41m[m
+[32m+[m[32m                  : typeof children === "function"[m[41m[m
+[32m+[m[32m                  ? children(props)[m[41m[m
+[32m+[m[32m                  : null}[m[41m[m
+[32m+[m[32m              </Provider>[m[41m[m
+[32m+[m[32m            );[m[41m[m
+[32m+[m[32m        }}[m[41m[m
+       </context.Consumer>[m
+     )[m
+[31m-    // return this.props.component()[m
+[31m-[m
+   }[m
+ }[m
+[1mdiff --git a/src/kReactRouterDom/Router.js b/src/kReactRouterDom/Router.js[m
+[1mindex d6bd11e..6820a83 100644[m
+[1m--- a/src/kReactRouterDom/Router.js[m
+[1m+++ b/src/kReactRouterDom/Router.js[m
+[36m@@ -3,12 +3,18 @@[m [mimport context from './context'[m
+ [m
+ const Provider = context.Provider[m
+ export default class Router extends Component {[m
+[32m+[m[32m  // match初始值是根路径，用法来源于源码，源码位置node_modules\react-router\modules\Router.js[m[41m[m
+[32m+[m[32m  // 要给[m[41m[m
+[32m+[m[32m  static computeRootMatch(pathname) {[m[41m[m
+[32m+[m[32m    return { path: "/", url: "/", params: {}, isExact: pathname === "/" };[m[41m[m
+[32m+[m[32m  }[m[41m[m
+   constructor(props) {[m
+     super(props)[m
+     // 路由发生变化后，页面不会重新渲染，要把location存在state里，当路由变化时改变state，出发子组件重新渲染[m
+     this.state = {[m
+       location: props.history.location[m
+     }[m
+[32m+[m[41m    [m
+     // history有一个listion方法，接受一个函数作为参数，这个函数又接收location作为参数，所以当location发生变化时，改变state中的location，触发子组件重新渲染，相当于订阅[m
+     this.unlisten = this.props.history.listen((location) => {[m
+       this.setState({location})[m
+[36m@@ -20,6 +26,15 @@[m [mexport default class Router extends Component {[m
+   }[m
+   [m
+   render() {[m
+[31m-    return <Provider value={{history: this.props.history}}>{this.props.children}</Provider>[m
+[32m+[m[32m    // login page页面需要从props上取location，所以要把location传下去[m[41m[m
+[32m+[m[32m    // useRouteMatch中需要使用match，所以给match一个初始值[m[41m[m
+[32m+[m[32m    return <Provider[m[41m [m
+[32m+[m[32m      value={{[m[41m[m
+[32m+[m[32m        history: this.props.history,[m[41m [m
+[32m+[m[32m        location: this.state.location,[m[41m [m
+[32m+[m[32m        match: Router.computeRootMatch(this.state.location.pathname)[m[41m[m
+[32m+[m[32m    }}>[m[41m[m
+[32m+[m[32m      {this.props.children}[m[41m[m
+[32m+[m[32m    </Provider>[m[41m[m
+   }[m
+ }[m
+[1mdiff --git a/src/kReactRouterDom/index.js b/src/kReactRouterDom/index.js[m
+[1mindex 5ffbc26..9082761 100644[m
+[1m--- a/src/kReactRouterDom/index.js[m
+[1m+++ b/src/kReactRouterDom/index.js[m
+[36m@@ -1,9 +1,22 @@[m
+ import BrowserRouter from './BrowserRouter'[m
+ import Route from './Route'[m
+ import Link from './Link'[m
+[32m+[m[32mimport {useHistory, useLocation, useRouteMatch, useParams} from './hooks'[m[41m[m
+[32m+[m[32mimport withRouter from './withRouter'[m[41m[m
+[32m+[m[32mimport Switch from './Switch'[m[41m[m
+[32m+[m[32mimport Redirect from './Redirect'[m[41m[m
+[32m+[m[32mimport Prompt from './Prompt'[m[41m[m
+ [m
+ export {[m
+   BrowserRouter,[m
+   Route,[m
+[31m-  Link[m
+[32m+[m[32m  Link,[m[41m[m
+[32m+[m[32m  useHistory,[m[41m[m
+[32m+[m[32m  useLocation,[m[41m[m
+[32m+[m[32m  useRouteMatch,[m[41m[m
+[32m+[m[32m  useParams,[m[41m[m
+[32m+[m[32m  withRouter,[m[41m[m
+[32m+[m[32m  Switch,[m[41m[m
+[32m+[m[32m  Redirect,[m[41m[m
+[32m+[m[32m  Prompt[m[41m[m
+ }[m
+\ No newline at end of file[m
+[1mdiff --git a/src/pages/reactRouterPage/LoginPage.js b/src/pages/reactRouterPage/LoginPage.js[m
+[1mindex 292f0a8..1be0b5c 100644[m
+[1m--- a/src/pages/reactRouterPage/LoginPage.js[m
+[1m+++ b/src/pages/reactRouterPage/LoginPage.js[m
+[36m@@ -1,5 +1,6 @@[m
+ import React, { Component } from 'react'[m
+[31m-import {Redirect} from 'react-router-dom'[m
+[32m+[m[32m// import {Redirect} from 'react-router-dom'[m[41m[m
+[32m+[m[32mimport { Redirect} from '../../kReactRouterDom/index'[m[41m[m
+ import { connect } from 'react-redux'[m
+ // import { connect } from '../../kReactRedux/index'[m
+ @connect([m
+[1mdiff --git a/src/pages/reactRouterPage/PrivateRoute.js b/src/pages/reactRouterPage/PrivateRoute.js[m
+[1mindex bb18eb8..6f2643e 100644[m
+[1m--- a/src/pages/reactRouterPage/PrivateRoute.js[m
+[1m+++ b/src/pages/reactRouterPage/PrivateRoute.js[m
+[36m@@ -1,5 +1,6 @@[m
+ import React from 'react'[m
+[31m-import {Route, Redirect} from 'react-router-dom'[m
+[32m+[m[32m// import {Route, Redirect} from 'react-router-dom'[m[41m[m
+[32m+[m[32mimport {Route, Redirect} from '../../kReactRouterDom/index'[m[41m[m
+ import { connect } from 'react-redux'[m
+ // import { connect } from '../../kReactRedux/index'[m
+ [m
+[1mdiff --git a/src/pages/reactRouterPage/ProductPage.js b/src/pages/reactRouterPage/ProductPage.js[m
+[1mindex d7db04f..283b053 100644[m
+[1m--- a/src/pages/reactRouterPage/ProductPage.js[m
+[1m+++ b/src/pages/reactRouterPage/ProductPage.js[m
+[36m@@ -1,28 +1,89 @@[m
+[31m-import React from 'react'[m
+[31m-import {Route, Link } from 'react-router-dom'[m
+[32m+[m[32mimport React, { Component } from 'react'[m[41m[m
+[32m+[m[32m// import {Route, Link, withRouter, Prompt} from 'react-router-dom'[m[41m[m
+[32m+[m[32mimport {[m[41m[m
+[32m+[m[32m  Route,[m[41m[m
+[32m+[m[32m  Link,[m[41m[m
+[32m+[m[32m  // useHistory,[m[41m[m
+[32m+[m[32m  // useLocation,[m[41m[m
+[32m+[m[32m  // useRouteMatch,[m[41m[m
+[32m+[m[32m  // useParams[m[41m[m
+[32m+[m[32m  withRouter,[m[41m[m
+[32m+[m[32m  Prompt[m[41m[m
+[32m+[m[32m} from '../../kReactRouterDom/index'[m[41m[m
+ [m
+[32m+[m[32m// ----------- 函数组件ProductPage ----------[m[41m[m
+ // 路由跳转的页面接收一个对象作为参数：{history: {…}, location: {…}, match: {…}, staticContext: undefined}[m
+[31m-export default function ProductPage({match, location}) {[m
+[31m-  console.log(match) // {path: "/product/:id", url: "/product/2", isExact: false, params: {…}}[m
+[31m-  // console.log(location) // {pathname: "/product/2/detail/2", search: "", hash: "", state: undefined, key: "eandz3"}[m
+[31m-  const {id} = match.params[m
+[31m-  return ([m
+[31m-    <div>[m
+[31m-      <p>ProductPage：{id}</p>[m
+[31m-      {/* 嵌套路由*/}[m
+[31m-      <Link to={match.url + '/detail/' + id}>detail</Link>[m
+[31m-      <Route path={match.url + '/detail/:id'} component={Detail}></Route>[m
+[31m-    </div>[m
+[31m-  )[m
+[32m+[m[32m// function ProductPage({match, location}) {[m[41m[m
+[32m+[m[32m//   // console.log(match) // {path: "/product/:id", url: "/product/2", isExact: false, params: {…}}[m[41m[m
+[32m+[m[32m//   // console.log(location) // {pathname: "/product/2/detail/2", search: "", hash: "", state: undefined, key: "eandz3"}[m[41m[m
+[32m+[m[32m//   const {id} = match.params[m[41m[m
+[32m+[m[32m//   return ([m[41m[m
+[32m+[m[32m//     <div>[m[41m[m
+[32m+[m[32m//       <p>ProductPage：{id}</p>[m[41m[m
+[32m+[m[32m//       {/* 嵌套路由*/}[m[41m[m
+[32m+[m[32m//       <Link to={match.url + '/detail/' + id}>detail</Link>[m[41m[m
+[32m+[m[32m//       <Route path={match.url + '/detail/:id'} component={Detail}></Route>[m[41m[m
+[32m+[m[32m//     </div>[m[41m[m
+[32m+[m[32m//   )[m[41m[m
+[32m+[m[32m// }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m// @withRouter[m[41m[m
+[32m+[m[32m// class ProductPage extends Component {[m[41m[m
+[32m+[m[32m//   render() {[m[41m[m
+[32m+[m[32m//     const {id} = this.props.match.params[m[41m[m
+[32m+[m[32m//     return ([m[41m[m
+[32m+[m[32m//       <div>[m[41m[m
+[32m+[m[32m//         <p>ProductPage：{id}</p>[m[41m[m
+[32m+[m[32m//         {/* 嵌套路由*/}[m[41m[m
+[32m+[m[32m//         <Link to={this.props.match.url + '/detail/' + id}>detail</Link>[m[41m[m
+[32m+[m[32m//         <Route path={this.props.match.url + '/detail/:id'} component={Detail}></Route>[m[41m[m
+[32m+[m[32m//       </div>[m[41m[m
+[32m+[m[32m//     )[m[41m[m
+[32m+[m[32m//   }[m[41m[m
+[32m+[m[32m// }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m@withRouter[m[41m[m
+[32m+[m[32mclass ProductPage extends Component {[m[41m[m
+[32m+[m[32m  constructor(props) {[m[41m[m
+[32m+[m[32m    super(props);[m[41m[m
+[32m+[m[32m    this.state = {confirm: true};[m[41m[m
+[32m+[m[32m  }[m[41m[m
+[32m+[m[32m  render() {[m[41m[m
+[32m+[m[32m    // console.log("Product", this.props)[m[41m[m
+[32m+[m[32m    return ([m[41m[m
+[32m+[m[32m      <div>[m[41m[m
+[32m+[m[32m        <h3>Product</h3>[m[41m[m
+[32m+[m[32m        <Link to="/">go home</Link>[m[41m[m
+[32m+[m[32m        <Route path={this.props.match.url + '/detail/:id'} component={Detail}></Route>[m[41m[m
+[32m+[m[32m        <Prompt[m[41m[m
+[32m+[m[32m          when={this.state.confirm}[m[41m[m
+[32m+[m[32m          // message="Are you sure you want to leave?"[m[41m[m
+[32m+[m[32m          message={location => {[m[41m[m
+[32m+[m[32m            return "Are you sure you want to leave-fun";[m[41m[m
+[32m+[m[32m          }}[m[41m[m
+[32m+[m[32m        />[m[41m[m
+[32m+[m[32m      </div>[m[41m[m
+[32m+[m[32m    );[m[41m[m
+[32m+[m[32m  }[m[41m[m
+ }[m
+ [m
+ [m
+ function Detail ({match, location}) {[m
+[31m-  console.log(match) // 和父路由的match不同：{path: "/product/2/detail/:id", url: "/product/2/detail/2", isExact: true, params: {…}}[m
+[32m+[m[32m  // console.log([m[41m[m
+[32m+[m[32m  //   useHistory(),[m[41m[m
+[32m+[m[32m  //   useLocation(),[m[41m[m
+[32m+[m[32m  //   useRouteMatch(),[m[41m[m
+[32m+[m[32m  //   useParams()[m[41m[m
+[32m+[m[32m  // )[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m  // console.log(match) // 和父路由的match不同：{path: "/product/2/detail/:id", url: "/product/2/detail/2", isExact: true, params: {…}}[m[41m[m
+   // console.log(location) // 和父路由的location完全一样：{pathname: "/product/2/detail/2", search: "", hash: "", state: undefined, key: "eandz3"}[m
+   return ([m
+     <div>[m
+       detail：{match.params.id}[m
+     </div>[m
+   )[m
+[31m-}[m
+\ No newline at end of file[m
+[32m+[m[32m}[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32mexport default ProductPage[m
+\ No newline at end of file[m
+[1mdiff --git a/src/pages/reactRouterPage/ReactRouterPage.js b/src/pages/reactRouterPage/ReactRouterPage.js[m
+[1mindex 9884198..5b74d55 100644[m
+[1m--- a/src/pages/reactRouterPage/ReactRouterPage.js[m
+[1m+++ b/src/pages/reactRouterPage/ReactRouterPage.js[m
+[36m@@ -10,13 +10,13 @@[m [mimport React, { Component } from 'react'[m
+ // useParams,[m
+ // withRouter[m
+ // import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'[m
+[31m-import { BrowserRouter as Router, Route, Link } from '../../kReactRouterDom/index'[m
+[32m+[m[32mimport { BrowserRouter as Router, Route, Link, Switch } from '../../kReactRouterDom/index'[m[41m[m
+ import IndexPage from './IndexPage'[m
+[31m-// import LoginPage from './LoginPage'[m
+[31m-// import UserPage from './UserPage'[m
+[32m+[m[32mimport LoginPage from './LoginPage'[m[41m[m
+[32m+[m[32mimport UserPage from './UserPage'[m[41m[m
+ import NotFindPage from './NotFindPage'[m
+[31m-// import ProductPage from './ProductPage'[m
+[31m-// import PrivateRoute from './PrivateRoute'[m
+[32m+[m[32mimport ProductPage from './ProductPage'[m[41m[m
+[32m+[m[32mimport PrivateRoute from './PrivateRoute'[m[41m[m
+ export default class ReactRouterPage extends Component {[m
+   render() {[m
+     return ([m
+[36m@@ -32,7 +32,7 @@[m [mexport default class ReactRouterPage extends Component {[m
+           {/* 动态路由：在路由地址后加/1传递参数 */}[m
+           <Link to='/product/1'>产品1 | </Link>[m
+           <Link to='/product/2'>产品2 |</Link>[m
+[31m-          {/* <Switch> */}[m
+[32m+[m[32m          <Switch>[m[41m[m
+             {/**[m
+              * 路由的三种匹配模式：children、component、render[m
+              * 三者是互斥的[m
+[36m@@ -54,16 +54,17 @@[m [mexport default class ReactRouterPage extends Component {[m
+               <p> 我是login page </p>[m
+               <p> 我是login page </p>[m
+             </Route> */}[m
+[31m-            {/* <Route path='/login' component={LoginPage}></Route> */}[m
+[32m+[m[32m            <Route path='/login' component={LoginPage}></Route>[m[41m[m
+ [m
+[31m-            {/* <Route path='/user' component={UserPage}></Route> */}[m
+[32m+[m[32m            { /* <Route path='/user' component={UserPage}></Route> */}[m[41m[m
+             {/* 使用PrivateRoute做路由拦截 */}[m
+[31m-            {/* <PrivateRoute path='/user' component={UserPage}></PrivateRoute> */}[m
+[32m+[m[32m            <PrivateRoute path='/user' component={UserPage}></PrivateRoute>[m[41m[m
+             [m
+             {/* 在路由地址后加/:id接收参数 */}[m
+[31m-            {/* <Route path='/product/:id' component={ProductPage}></Route> */}[m
+[32m+[m[32m            <Route path='/product/:id' component={ProductPage}></Route>[m[41m[m
+[32m+[m[41m            [m
+             <Route component={NotFindPage}></Route>[m
+[31m-          {/* </Switch> */}[m
+[32m+[m[32m          </Switch>[m[41m[m
+         </Router>[m
+       </div>[m
+     )[m
