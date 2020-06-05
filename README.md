@@ -15,6 +15,7 @@ redux源码：https://github.com/reduxjs/redux
 
 react-router的基本用法：\src\pages\reactRouterPage\ReactRouterPage.js
 Route的三种渲染方式的区别：\src\pages\reactRouterPage\RoutePage.js
+路由拦截：\src\pages\reactRouterPage\PrivateRoute.js
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
