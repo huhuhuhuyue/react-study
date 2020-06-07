@@ -9,12 +9,12 @@ export default function Prompt ({message, when = true }) {
         const method = context.history.block
         return (
           <LiceCycle
-          onMount={self => {
-            self.release = method(message)
-          }}
-          onUnmount={self => {
-            self.release()
-          }}
+            onMount={self => {
+              self.release = method(message)
+            }}
+            onUnmount={self => {
+              self.release()
+            }}
           />
         )
       }}

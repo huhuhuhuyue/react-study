@@ -2,11 +2,16 @@
 // import isPromise from 'is-promise'; // 判断是否是promise
 // 引入中间件
 import logger from "redux-logger";
-import thunk from "redux-thunk";
+// import thunk from "redux-thunk";
 import promise from 'redux-promise'
-
+import {asyncLoginReducer} from './asyncLogin'
 import {createStore, applyMiddleware, combineReducers} from "../kRedux/index";
 // console.log(createStore)
+
+// import loginSaga from "../action/loginSaga"; // 有一个saga
+import rootSaga from "../action/rootSaga"; // 有多个saga的使用方式
+import createSagaMiddleware from "redux-saga"; // 用saga代替redux-thunk
+const sagaMiddleware = createSagaMiddleware();
 
 // console.log(combineReducers) // 源码：https://github.com/reduxjs/redux/blob/master/src/combineReducers.ts
 
@@ -55,7 +60,7 @@ const loginReducer = (state = false, {type}) => {
 // 中间件是有顺序的
 // const store = createStore(counterReducer, applyMiddleware(thunk, promise, logger))
 // 项目中会有多个reducer，当存在多个reducer时使用combineReducers
-const store = createStore(combineReducers({counterReducer, numReducer, toggleReducer, loginReducer}), applyMiddleware(thunk, promise, logger))
+const store = createStore(combineReducers({counterReducer, numReducer, toggleReducer, loginReducer, asyncLoginReducer}), applyMiddleware(sagaMiddleware, promise, logger))
 
 // 实现一个logger中间件
 // function logger (stateApi) {
@@ -108,4 +113,6 @@ const store = createStore(combineReducers({counterReducer, numReducer, toggleRed
 //   }
 // }
 
+
+sagaMiddleware.run(rootSaga)
 export default store;

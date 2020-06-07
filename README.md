@@ -18,6 +18,8 @@ Route的三种渲染方式的区别：\src\pages\reactRouterPage\RoutePage.js
 实现react-Route：\src\kReactRouterDom
 路由拦截：\src\pages\reactRouterPage\PrivateRoute.js
 
+sage用法：src\action\rootSaga.js
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
